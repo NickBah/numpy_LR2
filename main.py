@@ -9,10 +9,13 @@ warnings.simplefilter('ignore', numpy.RankWarning)
 
 src = pandas.read_csv('src.csv',sep=';')
 
-param = 'rCount'
+param = 'rCount' #'square'
+paramLabel = 'Кол-во комнат' #'Площадь квартиры'
 x = src[param]
 y = src['cost']
 n = 5
+
+ourValue = 3
 
 
 def get_coeff(power=1):
@@ -52,10 +55,10 @@ def get_error(f,x,y):
 
 plot.scatter(x, y,s=15)
 
-plot.xlabel("Кол-во комнат")
+plot.xlabel(paramLabel)
 plot.ylabel("Цена, млн.руб.")
 
-plot.xticks([w for w in range(0,max(x) + 1)])
+plot.xticks([w for w in range(0,int(round(max(x))) + 1, 10 if max(x)>50 else 1)])
 plot.autoscale(tight=True)
 
 plot.grid(True, linestyle='-', color='0.75')
@@ -67,6 +70,8 @@ for i in range(1,n+1):
     lineCoord = numpy.linspace(0,x[len(x)-1],500)
 
     model = numpy.poly1d(coeff)
+
+    print(numpy.polyval(model,ourValue))
 
     print('Ошибка для модели, основанной на полиноме {} степени, равна {}'.format(i,get_error(model,x,y)))
 
